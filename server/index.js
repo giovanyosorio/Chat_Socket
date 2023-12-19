@@ -8,8 +8,9 @@ const port= process.env.PORT ?? 3000;
 
 app.use(loger('dev'));
 
+
 app.get('/', (req, res) => {  
-    res.send('<h1> Este es el chat</h1>');
+    res.sendFile(process.cwd() + '/client/index.html');
 })
 app.listen(port, () => {    
     console.log(`server started at http://localhost:${port}`);
