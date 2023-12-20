@@ -10,7 +10,14 @@
 
     import { io } from "https://cdn.socket.io/4.3.2/socket.io.esm.min.js";
 
-    const socket = io();
+    const socket = io({
+      auth: {
+        token: '123',
+        username:"gio",
+        serverOffset: 0
+
+      }
+    });
 
     const form =document.getElementById('form');
     const input =document.getElementById('input');
@@ -29,6 +36,18 @@
         input.value = '';
       }
     });
+    socket.on('recovery', (messagesData) => {
+    // Assuming you have an element with ID 'messageList' where you want to append your messages
+    messagesData.forEach((msg) => {
+      const item = document.createElement('li');
+      item.textContent = msg.message;
+      messages.appendChild(item);
+      console.log(msg.message)
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+});
+
+
 
 
   </script>

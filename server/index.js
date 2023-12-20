@@ -18,9 +18,15 @@ const io= new Server(server,{
     connectionStateRecovery: { },
 });
 
-
-
-io.on('connection', (socket) => {
+/* 
+const socket=io({
+    auth:{
+        token:1234,
+        username:"test",
+        serverOffset: 0
+    }
+}) */
+io.on('connection', async(socket) => {
     console.log('a user connected');
 
     socket.on('chat message', async (msg) => {
@@ -42,6 +48,25 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('user disconnected');
     });
+console.log(socket.handshake.auth)
+
+if(!socket.recovered){ //reecuperar mensajes
+    try{
+        const { data: messages, error } = await supabase
+            .from('messages')
+            .select('*')
+            .order('id', { ascending: false })
+            .limit(10);
+        if (error) throw error;
+        socket.emit('recovery', messages);
+        socket.recovered = true;
+        console.log('messages recovered');
+        console.log(messages)
+    }catch(error){
+        console.error('Error retrieving messages:', error);
+
+    }
+}
 });
 
 
