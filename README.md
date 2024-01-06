@@ -1,3 +1,3 @@
 # Chat_Socket
 
-Using nodejs, socket Io y MySQL 
+Using nodejs, socket.io y MySQL 
